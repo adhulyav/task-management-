@@ -1,0 +1,176 @@
+# Task Management System Using Python and SQLite3
+
+## 1. Abstract
+
+The **Task Management System** is a command-line application developed using **
+Python and SQLite3** to help users organize and manage their daily tasks efficiently. 
+It includes **user registration and login authentication**, allowing users to securely 
+access and manage their own tasks. The database consists of two related tables, 
+**Users and Tasks**, connected through **primary and foreign keys**, with appropriate 
+**database constraints** to maintain data integrity. Using Python's built-in **`sqlite3` 
+library**, the system supports **CRUD (Create, Read, Update, and Delete) operations**, 
+**task searching**, **filtering by status and priority**, **setting deadlines**, 
+and **tracking task completion**. The application provides a simple, reliable solution 
+for personal task management while demonstrating **Python programming, SQL database 
+management, and relational database concepts**.
+
+
+## 2. Main features and functionalities
+
+| Feature           | Description                                                   |
+| ----------------- | ------------------------------------------------------------- |
+| User registration | Allows new users to create accounts.                          |
+| User login        | Verifies credentials before granting access.                  |
+| Task creation     | Adds tasks with a title, description, deadline, and priority. |
+| View tasks        | Displays tasks belonging to the logged-in user.               |
+| Update tasks      | Modifies task details or status.                              |
+| Delete tasks      | Removes selected tasks.                                       |
+| Search tasks      | Finds tasks using a title or keyword.                         |
+| Filter tasks      | Filters tasks by status or priority.                          |
+| Task tracking     | Tracks Pending, In Progress, and Completed tasks.             |
+| Logout            | Ends the user's session.                                      |
+
+## 3. Proposed database tables
+
+The project requires two related tables. users and Tasks.
+
+### Table 1: `Users`
+
+Stores registered user information.
+
+| Attribute       | Data type | Constraint                 |
+| --------------- | --------- | -------------------------- |
+| `user_id`       | INTEGER   | Primary Key, AUTOINCREMENT |
+| `name`          | TEXT      | NOT NULL                   |
+| `email`         | TEXT      | NOT NULL, UNIQUE           |
+| `password_hash` | TEXT      | NOT NULL                   |
+| `created_at`    | TEXT      | DEFAULT current timestamp  |
+
+### Table 2: `Tasks`
+
+Stores tasks created by users.
+
+| Attribute     | Data type | Constraint                             |
+| ------------- | --------- | -------------------------------------- |
+| `task_id`     | INTEGER   | Primary Key, AUTOINCREMENT             |
+| `user_id`     | INTEGER   | Foreign Key, NOT NULL                  |
+| `title`       | TEXT      | NOT NULL                               |
+| `description` | TEXT      | Optional                               |
+| `deadline`    | TEXT      | Optional                               |
+| `priority`    | TEXT      | CHECK: High, Medium, Low               |
+| `status`      | TEXT      | CHECK: Pending, In Progress, Completed |
+| `created_at`  | TEXT      | DEFAULT current timestamp              |
+
+## 4. User roles
+
+1. Registered User (required)
+
+Can register, log in, create tasks, view their own tasks, update or delete their tasks, 
+search, filter, and log out.
+
+2. Administrator (optional)
+
+Can view registered-user information and manage user accounts if you implement administrative
+ permissions. This role is not necessary for the basic project.
+
+Recommendation: Start with the registered-user role. Add an administrator role only if your 
+project requirements call for it. If you do add one, enforce its permissions in the Python 
+application.
+
+## 5. User authentication
+
+User authentication verifies the identity of a person before they can access task management 
+features.
+
+Start application
+
+Register / Login
+
+Enter name, email, and password when registering; email and password when logging in.
+
+Validate credentials
+
+Check the email and verify the password hash.
+
+Access task menu
+
+Only after successful login.
+
+* Store passwords as secure hashes, never as plain text.
+
+* Use parameterized SQL queries to prevent SQL injection.
+
+* Use the logged-in user's `user_id` in every task query so users cannot access other users' 
+tasks.
+
+* On logout, clear the current user's session from the application.
+
+## 6. Menu-driven command-line interface
+
+The application will use a text-based menu rather than a graphical frontend.
+
+EXAMPLE APPLICATION MENU
+
+## Task Management System
+
+1. Register 2. Login 3. Exit
+
+AFTER SUCCESSFUL LOGIN
+
+1. Add Task 2. View All Tasks 3. Update Task 4. Delete Task 5. Search Tasks 6. Filter Tasks 
+7. Logout
+
+Users see the task menu only after successful login.
+
+## 7. Database keys and constraints
+
+* Primary key (PK): `user_id` uniquely identifies each user; `task_id` uniquely identifies
+each task.
+
+* Foreign key (FK): `Tasks.user_id` references `Users.user_id`, connecting tasks to their 
+owners.
+
+* UNIQUE: Prevents duplicate email addresses.
+
+* NOT NULL: Ensures required fields, such as names and task titles, are provided.
+
+* CHECK: Restricts priority and status to permitted values.
+
+* DEFAULT: Automatically assigns initial values, such as Pending status and the creation 
+timestamp.
+
+## 8. Database relationship
+
+### Users
+
+PK: `user_id`
+
+name, email, password_hash, created_at
+
+1 : N
+
+### Tasks
+
+PK: `task_id` · FK: `user_id`
+
+title, description, deadline, priority, status, created_at
+
+### Summary of Relationships Between Tables
+
+| Parent Table | Child Table | Primary Key (PK) | Foreign Key (FK) | Relationship      
+| Description                                                                 |
+| ------------ | ----------- | ---------------- | ---------------- | ----------------- 
+| --------------------------------------------------------------------------- |
+| `Users`      | `Tasks`     | `user_id`        | `user_id`        | One-to-Many (1:N) 
+| One user can create multiple tasks, but each task belongs to only one user. |
+
+
+## 9. Project summary
+
+The Task Management System is a simple Python application that uses SQLite3 for persistent 
+data storage and a command-line interface for user interaction. It combines user 
+authentication, two related database tables, primary and foreign keys, database constraints, 
+CRUD operations, searching, filtering, and task-status tracking.
+
+The project demonstrates how Python and relational database concepts work together to build
+ a practical application without requiring a separate frontend or database server.
